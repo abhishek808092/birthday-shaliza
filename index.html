@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Shaliza</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fcbad3, #ffdde1);
+            overflow-x: hidden;
+            text-align: center;
+            padding: 20px;
+            color: #fff;
+        }
+        .card {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            max-width: 400px;
+            margin: 20px auto;
+            animation: pop 1s ease-in-out;
+        }
+        h1 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        input, button {
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            margin-top: 15px;
+        }
+        button {
+            background-color: #ff6f61;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover { background-color: #ff4b3e; }
+        .slideshow { margin-top: 20px; width: 100%; max-width: 300px; height: 200px; overflow: hidden; border-radius: 15px; }
+        .slideshow img { width: 100%; height: 100%; object-fit: cover; }
+        #wish { margin-top: 20px; font-size: 1.2em; min-height: 60px; color: #ffeaea; }
+        #confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+        canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
+        .cake { margin-top: 30px; position: relative; display: inline-block; }
+        .cake img { width: 200px; }
+        .flame {
+            position: absolute;
+            width: 10px;
+            height: 15px;
+            background: radial-gradient(circle, #ffcc00 30%, #ff6600);
+            border-radius: 50%;
+            top: 50px;
+            cursor: pointer;
+            animation: flameFlicker 0.5s infinite alternate;
+        }
+        .flame:nth-child(1) { left: 60px; }
+        .flame:nth-child(2) { left: 95px; }
+        .flame:nth-child(3) { left: 130px; }
+
+        @keyframes flameFlicker {
+            from { transform: scale(1); opacity: 0.9; }
+            to { transform: scale(1.2); opacity: 1; }
+        }
+
+        .blow-text {
+            font-size: 1.5em;
+            margin-top: 10px;
+            color: #ffffcc;
+            animation: bounce 0.5s ease infinite alternate;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-5px); }
+        }
+
+        .speaker {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+
+        @keyframes pop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
+
+        @media (max-width: 500px) {
+            h1 { font-size: 1.5em; }
+            input, button { width: 90%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="confetti-container"></div>
+
+    <!-- Speaker Icon -->
+    <div class="speaker" onclick="toggleMusic()" id="speakerIcon">🔊</div>
+
+    <!-- Hidden Audio -->
+    <audio id="birthdaySong" src="mann_mera.mp3" loop></audio>
+
+    <div class="card">
+        <h1>🎉 Happy Birthday Shaliza 🎉</h1>
+        <p>Enter your new age 👇</p>
+        <input type="number" id="ageInput" placeholder="Your age" />
+        <button onclick="showSurprise()">See the Surprise</button>
+        <div id="message"></div>
+
+        <div class="slideshow" id="slideshow">
+            <img src="photo1.jpg" id="slideshowImage" alt="Birthday Memories">
+        </div>
+
+        <div id="wish"></div>
+
+        <!-- Birthday Cake -->
+        <div class="cake" id="cake" style="display:none;">
+            <p>🎂 Click the flames to blow out the candles! 🎂</p>
+            <div style="position: relative; display: inline-block;">
+                <img src="https://i.postimg.cc/8P5yqNZZ/birthday-cake.png" alt="Birthday Cake">
+                <!-- Candle Flames -->
+                <div class="flame" onclick="blowCandle(this)"></div>
+                <div class="flame" onclick="blowCandle(this)"></div>
+                <div class="flame" onclick="blowCandle(this)"></div>
+            </div>
+            <div id="blowText" class="blow-text">Blow the candles!</div>
+        </div>
+
+    </div>
+
+    <!-- Confetti Script -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+    <script>
+        const photos = ["photo1.jpg", "photo2.jpg", "photo3.jpg"];
+        let photoIndex = 0;
+        let candlesBlown = 0;
+        let isPlaying = true;
+
+        const song = document.getElementById('birthdaySong');
+        song.volume = 0.3; // Soft background volume
+
+        function startSlideshow() {
+            setInterval(() => {
+                photoIndex = (photoIndex + 1) % photos.length;
+                document.getElementById('slideshowImage').src = photos[photoIndex];
+            }, 3000);
+        }
+
+        function showSurprise() {
+            let age = document.getElementById('ageInput').value;
+            let messageDiv = document.getElementById('message');
+
+            if (age) {
+                messageDiv.innerHTML = `🎂 Wow Shaliza! You are now <b>${age}</b> years young! 🎉<br>Wishing you a day filled with love, joy, and magical moments of friendship! 💖`;
+
+                song.play();
+                startSlideshow();
+                typeWriter(`Dear Shaliza, 🎈 You are not just a friend, you are family. I wish you endless smiles, sweet memories, and a forever strong bond of friendship! 🎂🎉💝`);
+
+                document.getElementById('cake').style.display = 'block';
+                startConfetti();
+            } else {
+                messageDiv.innerHTML = `Please enter your age! 🎈`;
+            }
+        }
+
+        function typeWriter(text) {
+            let i = 0;
+            let speed = 50;
+            let wishDiv = document.getElementById('wish');
+            wishDiv.innerHTML = "";
+
+            function type() {
+                if (i < text.length) {
+                    wishDiv.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        function startConfetti() {
+            const duration = 10 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({
+                    particleCount: 5,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                confetti({
+                    particleCount: 5,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        }
+
+        function blowCandle(flameElement) {
+            flameElement.style.display = 'none';
+            candlesBlown++;
+            confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
+
+            if (candlesBlown === 3) {
+                document.getElementById('blowText').innerHTML = "🎉 Candles Blown! 🎉";
+            }
+        }
+
+        function toggleMusic() {
+            if (isPlaying) {
+                song.pause();
+                document.getElementById('speakerIcon').innerHTML = "🔇";
+            } else {
+                song.play();
+                document.getElementById('speakerIcon').innerHTML = "🔊";
+            }
+            isPlaying = !isPlaying;
+        }
+    </script>
+
+</body>
+</html>
