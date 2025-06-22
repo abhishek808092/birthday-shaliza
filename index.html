@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Shaliza</title>
+    <title>Happy Birthday Shailza</title>
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
     <style>
         * {
@@ -28,11 +28,9 @@
             0% {
                 background-position: 0% 50%;
             }
-
             50% {
                 background-position: 100% 50%;
             }
-
             100% {
                 background-position: 0% 50%;
             }
@@ -102,66 +100,19 @@
             color: #ffeaea;
         }
 
-        .cake {
-            margin-top: 30px;
-            position: relative;
-            display: inline-block;
+        .extra-wish {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #fff8dc;
+            animation: fadeIn 2s ease;
         }
 
-        .cake img {
-            width: 200px;
-        }
-
-        .flame {
-            position: absolute;
-            width: 10px;
-            height: 15px;
-            background: radial-gradient(circle, #ffcc00 30%, #ff6600);
-            border-radius: 50%;
-            top: 20px;
-            cursor: pointer;
-            animation: flameFlicker 0.5s infinite alternate;
-            transition: opacity 0.5s ease;
-        }
-
-        .flame:nth-child(2) {
-            left: 65px;
-        }
-
-        .flame:nth-child(3) {
-            left: 95px;
-        }
-
-        .flame:nth-child(4) {
-            left: 125px;
-        }
-
-        @keyframes flameFlicker {
+        @keyframes fadeIn {
             from {
-                transform: scale(1);
-                opacity: 0.9;
+                opacity: 0;
             }
-
             to {
-                transform: scale(1.2);
                 opacity: 1;
-            }
-        }
-
-        .blow-text {
-            font-size: 1.5em;
-            margin-top: 10px;
-            color: #ffffcc;
-            animation: bounce 0.5s ease infinite alternate;
-        }
-
-        @keyframes bounce {
-            from {
-                transform: translateY(0);
-            }
-
-            to {
-                transform: translateY(-5px);
             }
         }
 
@@ -174,13 +125,18 @@
             z-index: 1000;
         }
 
+        .gift-line {
+            margin-top: 20px;
+            font-size: 2em;
+            animation: pop 1s ease-in-out infinite alternate;
+        }
+
         @keyframes pop {
             0% {
-                transform: scale(0);
-            }
-
-            100% {
                 transform: scale(1);
+            }
+            100% {
+                transform: scale(1.2);
             }
         }
 
@@ -188,7 +144,6 @@
             h1 {
                 font-size: 1.5em;
             }
-
             input,
             button {
                 width: 90%;
@@ -198,11 +153,10 @@
 </head>
 
 <body>
-
     <div class="speaker" onclick="toggleMusic()" id="speakerIcon">🔊</div>
 
     <div class="card">
-        <h1>🎉 Happy Birthday Shaliza 🎉</h1>
+        <h1>🎉 Happy Birthday Shailza 🎉</h1>
         <p>Enter your new age 👇</p>
         <input type="number" id="ageInput" placeholder="Your age" />
         <button onclick="showSurprise()">See the Surprise</button>
@@ -214,34 +168,27 @@
 
         <div id="wish"></div>
 
-        <div class="cake" id="cake" style="display:none;">
-            <p>🎂 Click the flames to blow out the candles! 🎂</p>
-            <div style="position: relative; display: inline-block;">
-                <div class="flame" onclick="blowCandle(this)"></div>
-                <div class="flame" onclick="blowCandle(this)"></div>
-                <div class="flame" onclick="blowCandle(this)"></div>
-                <img src="https://i.postimg.cc/4ynsVL8L/birthday-cake.png" alt="Birthday Cake">
-            </div>
-            <div id="blowText" class="blow-text">Blow the candles!</div>
+        <div class="extra-wish" id="extraWish"></div>
+
+        <div id="virtualGifts" style="display:none;">
+            <div class="gift-line">🎁 🎈 🎉 🎀 🎊 🎂 🎁 🎈 🎉</div>
         </div>
 
+        <div class="extra-wish" id="finalMessage"></div>
     </div>
 
-    <audio id="birthdaySong" src="https://www.bensound.com/bensound-music/bensound-happyrock.mp3" loop></audio>
-    <audio id="blowSound" src="https://www.soundjay.com/human/sounds/breath-01.mp3"></audio>
+    <audio id="birthdaySong" src="song.mp3" loop></audio>
 
     <div id="confetti-container"></div>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
     <script>
-        const photos = ["shaliza1.jpg", "shaliza2.jpg", "shaliza3.jpg"];
+        const photos = ["shaliza1.jpg", "shaliza2.jpg"];
         let photoIndex = 0;
         let slideshowInterval;
-        let candlesBlown = 0;
         let isPlaying = true;
 
         const song = document.getElementById('birthdaySong');
-        const blowSound = document.getElementById('blowSound');
         song.volume = 0.3;
 
         function showSurprise() {
@@ -249,13 +196,15 @@
             let messageDiv = document.getElementById('message');
 
             if (age) {
-                messageDiv.innerHTML = `🎂 Wow Shaliza! You are now <b>${age}</b> years young! 🎉<br>Wishing you a day filled with love, joy, and magical moments of friendship! 💖`;
+                messageDiv.innerHTML = `🎂 Wow Shailza! You are now <b>${age}</b> years young! 🎉<br>Wishing you a day filled with love, joy, and magical moments of friendship! 💖`;
                 song.play();
                 document.getElementById('slideshow').style.display = 'block';
                 startSlideshow();
-                typeWriter(`Dear Shaliza, 🎈 You are not just a friend, you are family. I wish you endless smiles, sweet memories, and a forever strong bond of friendship! 🎂🎉💝`);
-                document.getElementById('cake').style.display = 'block';
+                typeWriter(`Dear Shailza, 🎈 We just met randomly online on Instagram and it's been a sweet 3-month friendship that already feels so special. You are not just a friend, you are family. I wish you endless smiles, sweet memories, and a forever strong bond of friendship! I hope this friendship keeps growing stronger every day. 🎂🎉💝 I wish you abundant happiness, unending prosperity, and success in everything you do. May your days be filled with laughter, your nights with peaceful dreams, and your life with people who truly cherish you. I am truly grateful that destiny brought us together online, and I look forward to building more beautiful memories with you. ✨🎁🎊`);
+                document.getElementById('virtualGifts').style.display = 'block';
                 startConfetti();
+                showExtraWish();
+                showFinalMessage();
             } else {
                 messageDiv.innerHTML = `Please enter your age! 🎈`;
             }
@@ -285,6 +234,16 @@
             type();
         }
 
+        function showExtraWish() {
+            const extraWishText = "May your journey ahead be filled with bright opportunities, laughter, unforgettable memories, and all the success you deserve. Happy Birthday once again! 🎁🎊✨ Thank you for trusting me with this beautiful friendship. Cheers to many more birthdays together!";
+            document.getElementById('extraWish').innerHTML = extraWishText;
+        }
+
+        function showFinalMessage() {
+            const finalText = "💖 You are truly special, Shailza! Here's to a future full of happiness, prosperity, and unforgettable memories! 💖";
+            document.getElementById('finalMessage').innerHTML = finalText;
+        }
+
         function startConfetti() {
             const duration = 10 * 1000;
             const end = Date.now() + duration;
@@ -309,18 +268,6 @@
                     requestAnimationFrame(frame);
                 }
             }());
-        }
-
-        function blowCandle(flameElement) {
-            flameElement.style.opacity = '0';
-            flameElement.style.pointerEvents = 'none';
-            candlesBlown++;
-            confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 }, emojis: ['💖'] });
-            blowSound.play();
-
-            if (candlesBlown === 3) {
-                document.getElementById('blowText').innerHTML = "🎉 Candles Blown! 🎉";
-            }
         }
 
         function toggleMusic() {
