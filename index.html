@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,26 +41,29 @@
             cursor: pointer;
         }
         button:hover { background-color: #ff4b3e; }
-        .slideshow { margin-top: 20px; width: 100%; max-width: 300px; height: 200px; overflow: hidden; border-radius: 15px; }
+        .slideshow { margin-top: 20px; width: 100%; max-width: 300px; height: 200px; overflow: hidden; border-radius: 15px; margin: auto; }
         .slideshow img { width: 100%; height: 100%; object-fit: cover; }
         #wish { margin-top: 20px; font-size: 1.2em; min-height: 60px; color: #ffeaea; }
-        #confetti-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
-        canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
+
+        /* Cake styling */
         .cake { margin-top: 30px; position: relative; display: inline-block; }
         .cake img { width: 200px; }
+
         .flame {
             position: absolute;
             width: 10px;
             height: 15px;
             background: radial-gradient(circle, #ffcc00 30%, #ff6600);
             border-radius: 50%;
-            top: 50px;
+            top: 20px;
             cursor: pointer;
             animation: flameFlicker 0.5s infinite alternate;
+            transition: opacity 0.5s ease;
         }
-        .flame:nth-child(1) { left: 60px; }
-        .flame:nth-child(2) { left: 95px; }
-        .flame:nth-child(3) { left: 130px; }
+
+        .flame:nth-child(2) { left: 65px; }
+        .flame:nth-child(3) { left: 95px; }
+        .flame:nth-child(4) { left: 125px; }
 
         @keyframes flameFlicker {
             from { transform: scale(1); opacity: 0.9; }
@@ -95,15 +99,10 @@
         }
     </style>
 </head>
+
 <body>
 
-    <div id="confetti-container"></div>
-
-    <!-- Speaker Icon -->
     <div class="speaker" onclick="toggleMusic()" id="speakerIcon">🔊</div>
-
-    <!-- Hidden Audio -->
-    <audio id="birthdaySong" src="mann_mera.mp3" loop></audio>
 
     <div class="card">
         <h1>🎉 Happy Birthday Shaliza 🎉</h1>
@@ -112,45 +111,44 @@
         <button onclick="showSurprise()">See the Surprise</button>
         <div id="message"></div>
 
+        <!-- Slideshow Section -->
         <div class="slideshow" id="slideshow">
-            <img src="photo1.jpg" id="slideshowImage" alt="Birthday Memories">
+            <img src="shaliza1.jpg" id="slideshowImage" alt="Birthday Memories">
         </div>
 
         <div id="wish"></div>
 
-        <!-- Birthday Cake -->
+        <!-- Birthday Cake Section -->
         <div class="cake" id="cake" style="display:none;">
             <p>🎂 Click the flames to blow out the candles! 🎂</p>
             <div style="position: relative; display: inline-block;">
-                <img src="https://i.postimg.cc/8P5yqNZZ/birthday-cake.png" alt="Birthday Cake">
-                <!-- Candle Flames -->
                 <div class="flame" onclick="blowCandle(this)"></div>
                 <div class="flame" onclick="blowCandle(this)"></div>
                 <div class="flame" onclick="blowCandle(this)"></div>
+                <img src="cake.png" alt="Birthday Cake">
             </div>
             <div id="blowText" class="blow-text">Blow the candles!</div>
         </div>
 
     </div>
 
-    <!-- Confetti Script -->
+    <!-- Hidden Music -->
+    <audio id="birthdaySong" src="mann_mera.mp3" loop></audio>
+
+    <!-- Confetti -->
+    <div id="confetti-container"></div>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
     <script>
-        const photos = ["photo1.jpg", "photo2.jpg", "photo3.jpg"];
+        const photos = ["shaliza1.jpg", "shaliza2.jpg", "shaliza3.jpg"];
         let photoIndex = 0;
+        let slideshowInterval;
+
         let candlesBlown = 0;
         let isPlaying = true;
 
         const song = document.getElementById('birthdaySong');
-        song.volume = 0.3; // Soft background volume
-
-        function startSlideshow() {
-            setInterval(() => {
-                photoIndex = (photoIndex + 1) % photos.length;
-                document.getElementById('slideshowImage').src = photos[photoIndex];
-            }, 3000);
-        }
+        song.volume = 0.3;
 
         function showSurprise() {
             let age = document.getElementById('ageInput').value;
@@ -168,6 +166,14 @@
             } else {
                 messageDiv.innerHTML = `Please enter your age! 🎈`;
             }
+        }
+
+        function startSlideshow() {
+            clearInterval(slideshowInterval);
+            slideshowInterval = setInterval(() => {
+                photoIndex = (photoIndex + 1) % photos.length;
+                document.getElementById('slideshowImage').src = photos[photoIndex];
+            }, 3000);
         }
 
         function typeWriter(text) {
@@ -211,7 +217,8 @@
         }
 
         function blowCandle(flameElement) {
-            flameElement.style.display = 'none';
+            flameElement.style.opacity = '0';
+            flameElement.style.pointerEvents = 'none';
             candlesBlown++;
             confetti({ particleCount: 50, spread: 60, origin: { y: 0.6 } });
 
@@ -233,4 +240,5 @@
     </script>
 
 </body>
+
 </html>
